@@ -1,0 +1,41 @@
+<div id="collapseExample" [ngbCollapse]="false">
+    <div class="card">
+        <div class="card-body">
+            <div *ngIf="!loginStatus">
+                             <h3>To activate AddCart button, you have to login first.....</h3>
+                         </div>
+            <p *ngFor="let alert of alerts">
+                <ngb-alert style="width: 300px;" [type]="alert.type" (close)="closeAlert(alert)">{{ alert.message }}
+                </ngb-alert>
+            </p>
+            <div *ngFor="let cat of allProducts">
+                <h3 class="modal-header" style="color: cornflowerblue">{{cat.Category}}</h3>
+
+                <table class="table table-bordered table-responsive" style="display: inline;margin-left: 5px;"
+                    *ngFor="let prod of cat.Products">
+                    <tr style="background-color:gray; height:200px;">
+                        <td style="text-align: center;">
+
+                            <img src="data:image/png;base64,{{prod.ImageFile}}"  height="200px;" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>{{prod.Name}}</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Price: </strong>{{prod.UnitPrice | currency:'INR'}}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>{{prod.Description | slice:0:40}}</p><small class="pull-right">more...</small>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button type="button" class="btn btn-primary" [disabled]="!loginStatus" (click)="OnAddCart(prod)"><b>Add to
+                                    cart</b></button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>

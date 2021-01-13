@@ -1,0 +1,245 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+
+    <a class="navbar-brand" routerLink='/productdisplay'>
+        <img src="./assets/images/monika.png" height="40px;"></a>
+    <form class="form-inline my-2 my-lg-0" style="padding-left: 20px;">
+        <input class="form-control mr-lg-2" style="width: 600px;" type="search" placeholder="Search for product, brand and more" aria-label="Search">
+
+    </form>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+    <div class="collapse navbar-collapse" style="padding-left: 150px;" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <div *ngIf="loginUser ; then thenBlock; else elseBlock"></div>
+            <ng-template #thenBlock>
+                <div class="btn-group mr-3">
+                    <button type="button" class="btn btn-primary"><b>{{loginUser | uppercase}}</b></button>
+
+                </div>
+
+            </ng-template>
+            <ng-template #elseBlock>
+                <li class="nav-item active">
+                    <a class="nav-link navbar-text" (click)="open(content)" href="#"><b>Login & Signup</b></a>
+                </li>
+            </ng-template>
+            <div class="btn-group mr-3">
+                <button type="button" *ngIf="loginUser" class="btn btn-primary" (click)="signOut()" href="#"><b>Logout</b></button>
+
+            </div>
+            <div class="btn-group mr-3">
+                <button type="button"  class="btn btn-primary" (click)="signOut()" href="#"><b>SignOut</b></button>
+
+            </div>
+
+            <li class="nav-item active">
+                <!-- <a class="nav-link" href="#"><b>Cart</b></a> -->
+                <button type="button" routerLink='/mycart' class="btn btn-primary">
+          <b>Cart</b>&nbsp; <span class="badge badge-light">{{cartItemCount}}</span>
+          <span class="sr-only">unread messages</span>
+        </button>
+            </li>
+
+        </ul>
+
+    </div>
+</nav>
+<!--  Model Code Start -->
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header" style="background: deepskyblue; font-size: xx-large;">
+        <h4 class="modal-title" id="modal-basic-title">Registration & SignIn</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+        <!-- Tab Start Code -->
+        <ngb-tabset>
+            <ngb-tab>
+                <ng-template ngbTabTitle><b>Login</b> </ng-template>
+                <ng-template ngbTabContent>
+                    <br>
+                    <form [formGroup]="loginForm">
+                        <div class="form-group">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">@</span>
+                                </div>
+                                <input type="text" formControlName="Email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1" (keyup)="clearMsg($event)">
+                            </div>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">*</span>
+                                </div>
+                                <input type="password" formControlName="Password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1">
+                            </div>
+                        </div>
+                        <div style="text-align: center;">
+                            <button type="button" [disabled]="!loginForm.valid" class="btn btn-primary" (click)="Login()"><b>Login</b></button>&nbsp;&nbsp;
+                            <button type="button" class="btn btn-dark" (click)="reset()"><b>Cancel</b></button>&nbsp;&nbsp;
+
+                            <button class="btn btn-light" (click)="signInWithGoogle()"><i class="fab fa-google-plus-square fa-2x btnColor"></i>
+                            SignIn with Google</button>&nbsp;&nbsp;
+                            <button class="btn btn-light" (click)="signInWithFB()"><i class="fab fa-facebook-square fa-2x btnColor"></i> SignIn
+                            with Facebook</button>
+
+                        </div>
+
+
+
+                    </form>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab>
+                <ng-template ngbTabTitle><b>Register</b> </ng-template>
+                <ng-template ngbTabContent>
+                    <br>
+                    <form [formGroup]="registrationForm">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label for="FormControlUserName" style="font-size: medium;"><b>User
+                      Name*:</b></label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" formControlName="UserName" placeholder="User Name" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="col-md-4">
+
+                                    <span style="font-weight: bold;color: red;" *ngIf="!registrationForm.controls['UserName'].valid&&registrationForm.controls['UserName'].dirty">
+                    <span *ngIf="registrationForm.controls.UserName.errors.required">User Name is Required.</span>
+                                    <span *ngIf="registrationForm.controls.UserName.errors.minlength">User name minimum should be length
+                      of 3.</span>
+                                    <span *ngIf="registrationForm.controls.UserName.errors.maxlength">User name maximum should be length
+                      of 50.</span>
+                                    </span>
+
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label for="FormControlPassword" style="font-size: medium;"><b>Password*:</b></label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="password" formControlName="Password" placeholder="Password" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="col-md-4">
+                                    <span style="font-weight: bold;color: red;" *ngIf="!registrationForm.controls['Password'].valid&&registrationForm.controls['Password'].dirty">
+                    <span *ngIf="registrationForm.controls.Password.errors.required">Password is Required.</span>
+                                    <span *ngIf="registrationForm.controls.Password.errors.minlength">Password minimum should be length
+                      of 3.</span>
+                                    <span *ngIf="registrationForm.controls.Password.errors.maxlength">Password maximum should be length
+                      of 50.</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label for="FormControlConfirmPassword" style="font-size: medium;"><b>Confirm Password*:</b></label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="password" formControlName="ConfirmPassword" placeholder="Confirm Password" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="col-md-4">
+                                    <span style="font-weight: bold;color: red;" *ngIf="!registrationForm.controls['ConfirmPassword'].valid&&registrationForm.controls['ConfirmPassword'].dirty">
+                      <span *ngIf="registrationForm.controls.Password.errors.required">ConfirmPassword is Required.</span>
+                                    <span *ngIf="ConfirmPassword.hasError('mustMatch')">Confirm Password Must Match With Password.</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label for="FormControlEmail" style="font-size: medium;"><b>Email*:</b></label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="email" formControlName="Email" placeholder="Email" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="col-md-4">
+                                    <span style="font-weight: bold;color: red;" *ngIf="!registrationForm.controls['Email'].valid&&registrationForm.controls['Email'].dirty">
+                    <span *ngIf="registrationForm.controls.Email.errors.required">Email is Required.</span>
+                                    <span *ngIf="registrationForm.controls.Email.errors.email">Email is not in correct pattern.</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label for="FormControlRole" style="font-size: medium;"><b>Role*:</b></label>
+                                </div>
+                                <div class="col-md-6">
+
+                                    <!-- <input type="text" formControlName="Role" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default"> -->
+                                    <select class="form-control" formControlName="Role" id="exampleFormControlSelect2">
+                      <option value='' selected disabled>Select Role</option>
+                    <option>Customer</option>
+                    <option>Sellers</option>
+                    <option>Tech Support</option>
+                    <option>CSE</option>
+                  </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <span style="font-weight: bold;color: red;" *ngIf="!registrationForm.controls['Role'].valid&&registrationForm.controls['Role'].dirty&&registrationForm.controls['Role'].touched">
+                    <span *ngIf="registrationForm.controls.Role.errors.required">Role is Required.</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label for="FormControlPhone" style="font-size: medium;"><b>Phone
+                      No*:</b></label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" formControlName="Phone" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="col-md-4">
+                                    <span style="font-weight: bold;color: red;" *ngIf="!registrationForm.controls['Phone'].valid&&registrationForm.controls['Phone'].dirty">
+                    <span *ngIf="registrationForm.controls.Phone.errors.required">Phone is Required.</span>
+                                    <span *ngIf="registrationForm.controls.Phone.errors.minlength">Phone minimum should be length
+                      of 10.</span>
+                                    <span *ngIf="registrationForm.controls.Phone.errors.maxlength">Phone maximum should be length
+                      of 10.</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label for="FormControlGender" style="font-size: medium;"><b>Gender:</b></label>
+                                </div>
+                                <div class="col-md-6">
+                                    <!-- <input type="text" formControlName="Gender" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default"> -->
+                                    <select class="form-control" formControlName="Gender" id="exampleFormControlSelect1">
+                    <option value='' selected disabled>Select Gender</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Other</option>
+                  </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <span style="font-weight: bold;color: red;" *ngIf="!registrationForm.controls['Gender'].valid&&registrationForm.controls['Gender'].dirty&&registrationForm.controls['Gender'].touched">
+                      <span *ngIf="registrationForm.controls.Gender.errors.required">Gender is Required.</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" style="margin-left: 39%;" [disabled]="!registrationForm.valid" class="btn btn-primary" (click)="OnRegister(registrationForm.value)"><b>Register</b></button>
+                    </form>
+
+                </ng-template>
+            </ngb-tab>
+        </ngb-tabset>
+        <!-- Tab End Code -->
+    </div>
+    <div class="modal-footer">
+        <p *ngFor="let alert of alerts">
+            <ngb-alert style="width: 758px;" [type]="alert.type" (close)="closeAlert(alert)">{{ alert.message }}</ngb-alert>
+        </p>
+    </div>
+</ng-template>
+<router-outlet></router-outlet>
